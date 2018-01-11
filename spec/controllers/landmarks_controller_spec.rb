@@ -29,7 +29,7 @@ describe LandmarksController do
 
   it "allows you to list all landmarks" do
     visit '/landmarks'
-    
+
     expect(page.status_code).to eq(200)
 
     expect(page.body).to include("BQE")
@@ -38,7 +38,8 @@ describe LandmarksController do
 
   it "allows you to see a single landmark" do
     @landmark = Landmark.first
-    get "/landmarks/#{@landmark.id}"
+    #get "/landmarks/#{@landmark.id}"
+    get "/landmarks/#{@landmark.slug}"
     expect(last_response.status).to eq(200)
     expect(last_response.body).to include("BQE")
     expect(last_response.body).to include("1961")
@@ -46,13 +47,14 @@ describe LandmarksController do
 
   it "allows you to view the form to edit a single landmark" do
     @landmark = Landmark.first
-    get "/landmarks/#{@landmark.id}/edit"
+    #get "/landmarks/#{@landmark.id}/edit"
+    get "/landmarks/#{@landmark.slug}/edit"
 
     expect(last_response.status).to eq(200)
     expect(last_response.body).to include('<form')
     expect(last_response.body).to include('landmark[name]')
     expect(last_response.body).to include('landmark[year_completed]')
-    expect(last_response.body).to include(@landmark.name)    
+    expect(last_response.body).to include(@landmark.name)
     expect(last_response.body).to include(@landmark.year_completed.to_s)
 
   end
@@ -60,13 +62,18 @@ describe LandmarksController do
 
   it "allows you to edit a single landmark" do
     @landmark = Landmark.first
-    visit "/landmarks/#{@landmark.id}/edit"
+    #visit "/landmarks/#{@landmark.id}/edit"
+    visit "/landmarks/#{@landmark.slug}/edit"
+    #save_and_open_page
     fill_in :name, with: "BQE!!!!"
     fill_in :year_completed, with: 9999
     click_button "Edit Landmark"
-    @landmark = Landmark.first
-    expect(page.current_path).to eq("/landmarks/#{@landmark.id}")
-    expect(page.body).to include(@landmark.name)    
+    #@landmark = Landmark.first
+    @landmark = Landmark.find_by(name: "BQE!!!!")
+    #binding.pry
+    #expect(page.current_path).to eq("/landmarks/#{@landmark.id}")
+    expect(page.current_path).to eq("/landmarks/#{@landmark.slug}")
+    expect(page.body).to include(@landmark.name)
 
     expect(page.body).to include(@landmark.year_completed.to_s)
     expect(@landmark.name).to eq("BQE!!!!")
@@ -75,7 +82,7 @@ describe LandmarksController do
 
   end
 
-  it "creates checkboxes for all the landmarks and titles created on the Figures new page" do 
+  it "creates checkboxes for all the landmarks and titles created on the Figures new page" do
     Landmark.create(name: 'BQE', year_completed: 1961)
       visit "/figures/new"
       expect(page).to have_css("input[type=\"checkbox\"]")
@@ -84,6 +91,6 @@ describe LandmarksController do
       visit "/figures/new"
       expect(page).to have_css("input[type=\"checkbox\"]")
       expect(page).to have_content('Mayor')
-      
+
   end
 end

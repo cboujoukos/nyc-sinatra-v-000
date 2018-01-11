@@ -4,6 +4,7 @@ describe FiguresController do
   before do
     queenb = Figure.create(:name => "Beyonce")
     kanye = Figure.create(:name => "Kanye")
+    bbq = Landmark.create(name: 'BBQ', year_completed: 1999)
     bqe = Landmark.create(name: 'BQE', year_completed: 1961)
     mr_president = Title.create(name: "Mr. President")
     bqe.figure = queenb
@@ -40,6 +41,7 @@ describe FiguresController do
   it "allows you to create a new figure with a landmark" do
     visit '/figures/new'
     fill_in :figure_name, :with => "Doctor Who"
+    #save_and_open_page
     check "landmark_#{Landmark.first.id}"
     click_button "Create New Figure"
     figure = Figure.last
@@ -69,7 +71,8 @@ describe FiguresController do
     figure = Figure.last
     landmark = Landmark.last
     expect(Figure.all.count).to eq(3)
-    expect(Landmark.all.count).to eq(2)
+    #expect(Landmark.all.count).to eq(2)
+    expect(Landmark.all.count).to eq(3)
     expect(figure.name).to eq("Doctor Who")
     expect(figure.landmarks).to include(landmark)
   end

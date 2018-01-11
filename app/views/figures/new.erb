@@ -13,7 +13,9 @@
 
   <h3>Landmarks:</h3>
   <% Landmark.all.each do |landmark| %>
-    <input id="landmark_<%= landmark.id %>" type="checkbox" name="figure[landmark_ids][]" value="<%= landmark.id %>"><%= landmark.name %></input>
+    <% if landmark.figure_id == nil %>
+      <input id="landmark_<%= landmark.id %>" type="checkbox" name="figure[landmark_ids][]" value="<%= landmark.id %>"><%= landmark.name %></input>
+      <% end %>
     <% end %>
 
   <p><label>Or enter a new landmark:</label>

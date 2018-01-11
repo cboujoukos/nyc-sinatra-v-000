@@ -1,4 +1,7 @@
 <h1>Landmarks</h1>
 <% @landmarks.each do |l| %>
-  <p><%= l.name %>, <%= l.slug %></p>
+  <h3><%= l.name %>: Estd. <%= l.year_completed %></h3>
+  <% if l.figure_id != nil %>
+    <p>- Dedicated to <%= l.figure.name %>: <%= l.figure.titles.collect{|title| title = title.name}.join(", ") %></p>
+    <% end %>
   <% end %>

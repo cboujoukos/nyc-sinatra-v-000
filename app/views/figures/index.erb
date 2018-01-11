@@ -1,4 +1,10 @@
 <h1>Figures</h1>
 <% @figures.each do |f| %>
-  <p><%= f.name %>, <%= f.slug %></p>
+  <h3><%= f.name %></h3>
+  <% if !f.titles.empty? %>
+    <p>Titles: <%= f.titles.collect{|t| t.name}.join(", ") %></p>
+    <% end %>
+  <% if !f.landmarks.empty? %>
+    <p>Landmarks: <%= f.landmarks.collect{|l| l.name}.join(", ") %></p>
+    <% end %>
   <% end %>
